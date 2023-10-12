@@ -20,13 +20,13 @@ define('CONTACT_URI',plugin_dir_url(__FILE__));
 register_activation_hook(__FILE__,'contact_plugin_activation');
 
 function contact_plugin_activation(){
-    echo "Contact plugin activation";
+
 }
 
 register_deactivation_hook(__FILE__,'contact_plugin_deactivation');
 function contact_plugin_deactivation(){
-    echo "Contact plugin contact_plugin_deactivation";
+
 }
 
 
-include_once CONTACT_PATH.' includes/include.php';
+include_once CONTACT_PATH.'includes\include.php';

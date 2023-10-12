@@ -1,12 +1,12 @@
 <?php
 
-add_action('init','contact_post_type');
+
 
 // Register Post Type
 
 function contact_post_type(){
     //post - page - product
-    register_post_type('wporg_product',
+    register_post_type('products',
     array(
         'labels'      => array(
             'name'          => __('Products', 'contact-plugin'),
@@ -14,27 +14,29 @@ function contact_post_type(){
         ),
             'public'      => true,
             'has_archive' => true,
-            'rewire' => array('slug' => 'products'),
+            'rewrite' => array('slug' => 'products'),
             'supports' => array('title', 'editor', 'thumbnail', 'excerpt')
     )
 );
 }
 
+add_action('init','contact_post_type');
+
 //Register Taxonomy Type
 
-function wporg_register_taxonomy_course() {
+function register_taxonomy_post() {
     $labels = array(
-        'name'              => _x( 'Courses', 'taxonomy general name' ),
-        'singular_name'     => _x( 'Course', 'taxonomy singular name' ),
-        'search_items'      => __( 'Search Courses' ),
-        'all_items'         => __( 'All Courses' ),
-        'parent_item'       => __( 'Parent Course' ),
-        'parent_item_colon' => __( 'Parent Course:' ),
-        'edit_item'         => __( 'Edit Course' ),
-        'update_item'       => __( 'Update Course' ),
-        'add_new_item'      => __( 'Add New Course' ),
-        'new_item_name'     => __( 'New Course Name' ),
-        'menu_name'         => __( 'Course' ),
+        'name'              => _x( 'Categories', 'taxonomy general name' ),
+        'singular_name'     => _x( 'Category', 'taxonomy singular name' ),
+        'search_items'      => __( 'Search Categories' ),
+        'all_items'         => __( 'All Categories' ),
+        'parent_item'       => __( 'Parent Category' ),
+        'parent_item_colon' => __( 'Parent Category:' ),
+        'edit_item'         => __( 'Edit Category' ),
+        'update_item'       => __( 'Update Category' ),
+        'add_new_item'      => __( 'Add New Category' ),
+        'new_item_name'     => __( 'New Category Name' ),
+        'menu_name'         => __( 'Category' ),
     );
     $args   = array(
         'hierarchical'      => true, // make it hierarchical (like categories)
@@ -44,8 +46,8 @@ function wporg_register_taxonomy_course() {
         'query_var'         => true,
         'rewrite'           => [ 'slug' => 'course' ],
     );
-    register_taxonomy( 'course', [ 'post' ], $args );
+    register_taxonomy( 'posts', [ 'post' ], $args );
 }
-add_action( 'init', 'wporg_register_taxonomy_course' );
+add_action( 'init', 'register_taxonomy_post' );
 
 
