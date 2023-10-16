@@ -1,6 +1,4 @@
-<?php
-// Register Post Type
-
+<?
 function custom_admin_menu()
 {
     add_menu_page(
@@ -13,11 +11,8 @@ function custom_admin_menu()
         75                    // Vị trí trên menu
     );
 }
-
-function custom_tag_management(){
-    include_once CONTACT_PATH. 'includes\templates\post_type.php';
-}
-
 add_action('admin_menu', 'custom_admin_menu');
 
-
+function custom_tag_management(){
+    require_once TAG_MANAGEMENT_PATH .'includes\templates\tag_management.php';
+}
