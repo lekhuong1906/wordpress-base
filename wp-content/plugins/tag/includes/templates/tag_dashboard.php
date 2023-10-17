@@ -1,11 +1,12 @@
 <?php
-    $objPost = new Post();
-    $result = $objPost->get();
-    $string = implode(', ', $result);
-    echo " <123>";
-    echo($string);die;
-?>
 
+$post = new Tag();
+$pages = $post->get_page();
+
+
+$url = admin_url('admin.php?page=tag_edit&id=' . 1); //id
+echo $url;die;
+?>
 
 <style>
     .row {
@@ -23,6 +24,14 @@
     }
 
     .custom-ul {
+        background-color: #fff;
+        overflow: scroll;
+        overflow-x: hidden;
+        max-height: 130px;
+        max-width: 300px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 5px;
         list-style: none;
         margin: 0;
         padding: 0;
@@ -30,8 +39,11 @@
 
     .custom-ul li {
         display: flex;
-        margin: 5px 0;
+        margin: 5px 0 5px 3%;
         align-items: center;
+        margin-bottom: 5px;
+
+        /* white-space: normal; */
     }
 
     .custom-ul input[type="checkbox"] {
@@ -42,8 +54,8 @@
 <div class="wrap nosubsub">
     <h1 class="wp-heading-inline">Tag Add</h1>
     <div class="wp-clearfix">
-
-        <form action="#" method="get">
+        <a class="button" type="submit" href="<?=$url?>">Submit</a>
+        <form action="" method="post">
             <div class="row">
 
                 <div class="col-wrap mr-3">
@@ -51,16 +63,9 @@
                         <label for="tag_name">Description</label>
                         <select name="tag_name" id="parent" class="postform" aria-describedby="parent-description">
                             <option value="-1" hidden>--Sellect--</option>
-                            <!-- <option class="level-0" value="1">--Slect--</option> -->
-                            <option value="">[Google Analytics] Globla site tag</option>
-                            <option value="">[Google Ads] Global site tag</option>
-                            <option value="">[Google Ads] Conversion tag</option>
-                            <option value="">[Yahoo! Ads] Site general tag</option>
-                            <option value="">[Yahoo! Ads] Conversion tag</option>
-                            <option value="">[TikTok Ads] TikTok Pixel</option>
-                            <option value="">[Meta Ads] Meta pixel</option>
-                            <option value="">[Microsoft Advertising] UET tag</option>
-                            <option value="">[Twitter Ads] Twitter Pixel</option>
+                            <?php foreach ($tag_names as $tag_name) : ?>
+                                <option value=""><?= $tag_name->name ?></option>
+                            <?php endforeach; ?>
                             <option value="10">Other</option>
                         </select>
 
@@ -69,7 +74,7 @@
 
                 <div class="col-wrap col-wrap--hidden mr-3">
                     <div class="form-wrap">
-                        <label for="name_entry">Name entry</label>
+                        <label for="name_entry">Name</label>
                         <input name="name_entry" type="text" placeholder="Enter Name Entry">
                     </div>
                 </div>
@@ -79,8 +84,8 @@
                         <label for="tag_name">Position</label>
                         <select name="tag_name" id="parent" class="" aria-describedby="parent-description">
                             <option value="-1" hidden>--Sellect--</option>
-                            <option value="">"head"</option>
-                            <option value="">"body"</option>
+                            <option value="0">&lt;head&gt;</option>
+                            <option value="1">&lt;body&gt;</option>
                         </select>
 
                     </div>
@@ -89,11 +94,14 @@
                 <div class="col-wrap mr-3">
                     <div class="form-wrap">
                         <label for="tag_name">Instalation Page</label>
+                        <!-- <div class="search-bar">
+                            <input style="width:100%;" type="text" placeholder="Search">
+                        </div> -->
                         <ul class="custom-ul">
-                            <li><input type="checkbox" id="item1"> <label for="item1">All</label></li>
-                            <li><input type="checkbox" id="item2"> <label for="item2">Thank Page</label></li>
-                            <li><input type="checkbox" id="item3"> <label for="item3">Top Page</label></li>
-                            <li><input type="checkbox" id="item3"> <label for="item3">Application Page</label></li>
+                            <li><input type="checkbox" id="all"> <label for="item1">All</label></li>
+                            <?php foreach ($pages as $page) : ?>
+                                <li><input type="checkbox" id="<?= $page->id ?>"> <label for="<?= $page->id ?>"><?= $page->post_title ?></label></li>
+                            <?php endforeach; ?>
                         </ul>
 
                     </div>
@@ -107,13 +115,14 @@
                 </div>
 
             </div>
-            <button class="button-primary">Add</button>
+            <input type="submit" class="button-primary" name="submit" value="Add">
         </form>
     </div>
 </div>
 
 <script type="text/javascript">
     jQuery(document).ready(function() {
+        //show name entry and installation position
         jQuery('#parent').on('change', function() {
             let value = jQuery(this).val();
             if (value == 10) {
@@ -121,6 +130,20 @@
             } else {
                 jQuery('.col-wrap.col-wrap--hidden').css('display', 'none');
             }
+        });
+
+        //
+        var $checkboxes = jQuery('input[type="checkbox"]').not('#all');
+
+        jQuery('#all').change(function() {
+            var isChecked = jQuery(this).prop('checked');
+            jQuery('input[type="checkbox"]').prop('checked', isChecked);
+        });
+
+        $checkboxes.change(function() {
+            // Kiểm tra xem tất cả các checkbox trừ "All" có được chọn không
+            var allChecked = $checkboxes.length === $checkboxes.filter(':checked').length;
+            jQuery('#all').prop('checked', allChecked);
         });
     })
 </script>
