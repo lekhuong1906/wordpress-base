@@ -2,20 +2,26 @@
 
 class Tag 
 {
-    private $_posts = '';
+    private $data;
 
     public function __construct()
     {
         global $wpdb;
-        $this->_posts = $wpdb->prefix . 'wp_posts'; //table wp_posts
+        $this->data = $wpdb->prefix . 'data'; //table wp_posts
     }
 
-    public function get_page(){
+    public function get(){
         global $wpdb;
-        $sql = "SELECT * FROM $this->_posts ";
-        $query = "SELECT * FROM $wpdb->posts WHERE post_type = 'page' AND post_status = 'publish'";
-        $items =  $wpdb->get_results($query);
+        $sql = "SELECT * FROM $this->data";
+        $items =  $wpdb->get_results($sql);
         return $items;
+    }
+
+    public function find($id){
+        global $wpdb;
+        $sql = "SELECT * FROM $this->data WHERE id = $id";
+        $item =  $wpdb->get_row($sql);
+        return $item;
     }
 
 }

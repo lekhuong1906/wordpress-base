@@ -29,48 +29,77 @@ function contact_plugin_activation()
 
 
 
-add_action('admin_menu', function(){
+add_action('admin_menu', function () {
     add_menu_page(
         'Tag',   // Tiêu đề của trang
         'Tag Management',           // Tiêu đề của menu
         'manage_options',      // Quyền truy cập cần thiết (ở đây là 'manage_options')
         'tag-management', // Slug của menu
-        'custom_tag_management', // Hàm để hiển thị trang
+        'custom_tag_management_dashboard', // Hàm để hiển thị trang
         'dashicons-cart',     // Đường dẫn đến biểu tượng của menu
         75                    // Vị trí trên menu
     );
+
+    add_submenu_page(
+        'Tag',   // Tiêu đề của trang
+        '',           // Tiêu đề của menu
+        'Add Tag',
+        'manage_options',      // Quyền truy cập cần thiết (ở đây là 'manage_options')
+        'add-tag-management', // Slug của menu
+        'custom_tag_management_add', // Hàm để hiển thị trang
+    );
+    add_submenu_page(
+        'Tag',   // Tiêu đề của trang
+        '',           // Tiêu đề của menu
+        'Edit Tag',
+        'manage_options',      // Quyền truy cập cần thiết (ở đây là 'manage_options')
+        'edit-tag-management', // Slug của menu
+        'custom_tag_management_edit', // Hàm để hiển thị trang
+    );
 });
-   
-
-add_filter('manage_edit-post_tag_columns', function(){
-    $columns['edit'] = 'Edit'; // Thêm cột "Edit"
-    return $columns;
-});
 
 
-function add_edit_action_column($columns) {
-    $columns['edit'] = 'Edit'; // Thêm cột "Edit"
-    return $columns;
+function custom_tag_management_dashboard()
+{
+    include_once TAG_PATH . 'includes\templates\tag_dashboard.php';
 }
-add_filter('manage_edit-post_tag_columns', 'add_edit_action_column');
 
-function display_edit_action($value, $column_name, $term_id) {
-    if ($column_name == 'edit') {
-        $edit_url = esc_url(add_query_arg(array('page' => 'edit-tag', 'tag_ID' => $term_id), 'admin.php'));
-        return "<a href='$edit_url'>Edit</a>";
-    }
-    return $value;
+function custom_tag_management_add()
+{
+    include_once TAG_PATH . 'includes\templates\tag_add.php';
 }
-add_filter('manage_post_tag_custom_column', 'display_edit_action', 10, 3);
-
-
-
-function custom_tag_management(){
-    include_once TAG_PATH. 'includes\templates\tag_dashboard.php';
+function custom_tag_management_edit()
+{
+    include_once TAG_PATH . 'includes\templates\tag_edit.php';
 }
+
+
 
 
 register_deactivation_hook(__FILE__, 'contact_plugin_deactivation');
 function contact_plugin_deactivation()
 {
 }
+
+
+
+// add_filter('manage_edit-post_tag_columns', function(){
+//     $columns['edit'] = 'Edit'; // Thêm cột "Edit"
+//     return $columns;
+// });
+
+
+// function add_edit_action_column($columns) {
+//     $columns['edit'] = 'Edit'; // Thêm cột "Edit"
+//     return $columns;
+// }
+// add_filter('manage_edit-post_tag_columns', 'add_edit_action_column');
+
+// function display_edit_action($value, $column_name, $term_id) {
+//     if ($column_name == 'edit') {
+//         $edit_url = esc_url(add_query_arg(array('page' => 'edit-tag', 'tag_ID' => $term_id), 'admin.php'));
+//         return "<a href='$edit_url'>Edit</a>";
+//     }
+//     return $value;
+// }
+// add_filter('manage_post_tag_custom_column', 'display_edit_action', 10, 3);
